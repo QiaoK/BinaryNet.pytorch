@@ -16,6 +16,8 @@ from utils import *
 from datetime import datetime
 from ast import literal_eval
 from torchvision.utils import save_image
+import sys
+import numpy as np
 
 
 model_names = sorted(name for name in models.__dict__
@@ -214,6 +216,14 @@ def main():
         #results.plot(x='epoch', y=['train_error5', 'val_error5'],
         #             title='Error@5', ylabel='error %')
         results.save()
+
+    model_vector = np.empty((num_parameters),dtype=np.int8)
+    counter = 0
+    for p in model.parameters():
+        p = p.cpu().data.numpy().reshape(-1)
+        model_vector[counter:(counter+p.shape[0])] = p
+        counter += p.shape[0]
+    print(np.unique(model_vector,return_counts=True))
 
 
 def forward(data_loader, model, criterion, epoch=0, training=True, optimizer=None):
