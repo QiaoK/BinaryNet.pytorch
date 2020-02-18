@@ -74,7 +74,7 @@ def main():
 
     if args.evaluate:
         args.results_dir = '/tmp'
-    if args.save is '':
+    if args.save == '':
         args.save = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     save_path = os.path.join(args.results_dir, args.save)
     if not os.path.exists(save_path):
@@ -99,7 +99,7 @@ def main():
     model = models.__dict__[args.model]
     model_config = {'input_size': args.input_size, 'dataset': args.dataset}
 
-    if args.model_config is not '':
+    if args.model_config != '':
         model_config = dict(model_config, **literal_eval(args.model_config))
 
     model = model(**model_config)
@@ -122,7 +122,7 @@ def main():
         if os.path.isfile(checkpoint_file):
             logging.info("loading checkpoint '%s'", args.resume)
             checkpoint = torch.load(checkpoint_file)
-            args.start_epoch = checkpoint['epoch'] - 1
+            args.start_epoch = checkpoint['epoch']
             best_prec1 = checkpoint['best_prec1']
             model.load_state_dict(checkpoint['state_dict'])
             logging.info("loaded checkpoint '%s' (epoch %s)",
